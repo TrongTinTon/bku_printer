@@ -21,16 +21,27 @@ class AuthController extends BaseController{
         if ($userEntity) {
             $user = $userEntity->toArray();
             $jwtHandler = new JWTHandler();
+            
+            $id = $user['id'];
+            $username = $user['user_name'];
+            $email = $user['email'];
+            $roleId = $user['role_id'];
             $payload = [
-                'id' => $user['id'], 
-                'email' => $user['email'],
-                'role_id' => $user['role_id']
+                'id' => $id,
+                'user_name' =>  $username,
+                'email' => $email,
+                'role_id' => $roleId
             ];
             $token = $jwtHandler->generateToken($payload);        
-            
+      
             $responeData = [
                 'token' => $token,
-                'user' => $user
+                'user' => [
+                    'id' => $id,
+                    'userName' =>  $username,
+                    'email' => $email,
+                    'roleId' => $roleId
+                ]
             ];
             
             Response::json(200, $responeData, 'Đăng nhập thành công');

@@ -7,13 +7,13 @@ use App\Entities\Entity;
 class UserEntity extends Entity {
     private $id;
     private $email;
-    private $username;
+    private $user_name;
     private $role_id;
 
-    public function __construct($id = null, $email = null, $username = null, $role_id = null) {
+    public function __construct($id = null, $email = null, $user_name = null, $role_id = null) {
         $this->id = $id;
         $this->email = $email;
-        $this->username = $username;
+        $this->user_name = $user_name;
         $this->role_id = $role_id;
     }
 
@@ -24,8 +24,8 @@ class UserEntity extends Entity {
     public function getEmail() { return $this->email; }
     public function setEmail($email) { $this->email = $email; }
 
-    public function getUserName() { return $this->username; }
-    public function setUserName($username) { $this->username = $username; }
+    public function getUserName() { return $this->user_name; }
+    public function setUserName($user_name) { $this->user_name = $user_name; }
 
     public function getRoleId() { return $this->role_id; }
     public function setRoleId(array $role_id) { $this->role_id = $role_id; }
@@ -34,7 +34,7 @@ class UserEntity extends Entity {
         return [
             'id' => $this->id ?? null,
             'email' => $this->email ?? null,
-            'username' => $this->username ?? null,
+            'user_name' => $this->user_name ?? null,
             'role_id' => $this->role_id ?? null
         ];
     }

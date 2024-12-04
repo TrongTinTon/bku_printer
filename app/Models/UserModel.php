@@ -36,7 +36,7 @@ class UserModel extends Model{
         return new UserEntity(
             $data['id'] ?? null,
             $data['email'] ?? null,
-            $data['username'] ?? null,
+            $data['user_name'] ?? null,
             $data['role_id']?? null
         );
     }

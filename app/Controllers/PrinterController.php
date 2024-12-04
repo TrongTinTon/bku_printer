@@ -39,7 +39,7 @@ class PrinterController extends BaseController {
             // Khởi tạo lớp validate và áp dụng luật
             $validator = new ValidateRequest($data);
             $validator->validate([
-                'name' => 'required',
+                'printerName' => 'required',
                 'status' => 'required',
             ]);
            
@@ -51,7 +51,7 @@ class PrinterController extends BaseController {
         }
 
         $entity = new PrinterEntity();
-        $entity->setName($data['name']);
+        $entity->setName($data['printerName']);
         $entity->setStatus($data['status']);
         $respone;
         try {

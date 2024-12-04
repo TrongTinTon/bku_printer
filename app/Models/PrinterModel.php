@@ -21,13 +21,13 @@ class PrinterModel extends Model {
         $name = $printer->getName();
         $status = $printer->getStatus();
 
-        $sql = "INSERT INTO printers (name, status) VALUES (?, ?)";
+        $sql = "INSERT INTO printers (printer_name, status) VALUES (?, ?)";
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$name, $status]);
     }
 
     public function getPrinters(array $conditions = []) {
-        $sql = "SELECT p.name, p.status, t.name as tray_name, t.total_page FROM printers p
+        $sql = "SELECT p.printer_name , p.status, t.tray_name, t.total_page FROM printers p
             LEFT JOIN trays t ON t.printer_id = p.id";
         $params = array();
         // Thêm điều kiện WHERE nếu có
@@ -47,7 +47,7 @@ class PrinterModel extends Model {
         $printers = [];
         // Map dữ liệu
         foreach ($results as $row) {
-            $name = $row['name'];
+            $name = $row['printer_name'];
             $status = $row['status'];
             $tray_name = $row['tray_name'];
             $total_page = $row['total_page'];
@@ -55,7 +55,7 @@ class PrinterModel extends Model {
             // Nếu chưa tồn tại key `name` trong kết quả, khởi tạo
             if (!isset($printers[$name])) {
                 $printers[$name] = [
-                    'name' => $name,
+                    'printerName' => $name,
                     'status' => $status,
                     'tray' => []
                 ];

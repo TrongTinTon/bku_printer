@@ -27,7 +27,7 @@ class PrintHistoryModel extends Model {
     }
 
     public function getPrintHistorys(array $conditions = []) {
-        $sql = "SELECT ph.id, u.username, p.name as printer_name, ph.file_name, ph.pages, ph.created_at FROM print_history ph
+        $sql = "SELECT ph.id, u.user_name, p.printer_name as printer_name, ph.file_name, ph.pages, ph.created_at FROM print_history ph
             LEFT JOIN printers p ON p.id = ph.printer_id
             LEFT JOIN users u ON u.id = ph.user_id ";
         $params = array();
@@ -58,8 +58,8 @@ class PrintHistoryModel extends Model {
     public function mapToEntity(array $data) {
         return [
             'id' => $data['id'] ?? null,
-            'username' => $data['username'] ?? null,
-            'printer' => $data['printer_name'] ?? null,
+            'userName' => $data['username'] ?? null,
+            'printerName' => $data['printer_name'] ?? null,
             'fileName' => $data['file_name'] ?? null,
             'pages' => $data['pages'] ?? null,
             'createdAt' => $data['created_at'] ?? null,

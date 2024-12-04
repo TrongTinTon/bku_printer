@@ -10,19 +10,19 @@ use App\Entities\Entity;
  */
 class PrinterEntity extends Entity {
     private $id;
-    private $name;
+    private $printer_name;
     private $status;
 
     /**
      * Constructor của PrinterEntity.
      *
      * @param int|null $id ID của máy in (null nếu là user mới).
-     * @param string|null $name name của máy in.
+     * @param string|null $printer_name printer_name của máy in.
      * @param string|null $status trạng thái của máy in.
      */
-    public function __construct($id = null, $name = null, $status = null) {
+    public function __construct($id = null, $printer_name = null, $status = null) {
         $this->id = $id;
-        $this->name = $name;
+        $this->printer_name = $printer_name;
         $this->status = $status;
     }
 
@@ -41,28 +41,28 @@ class PrinterEntity extends Entity {
     public function setId($id) { $this->id = $id; }
 
     /**
-     * Lấy name của máy in.
+     * Lấy printer_name của máy in.
      *
      * @return string|null tên của máy in.
      */
-    public function getName() { return $this->name; }
+    public function getName() { return $this->printer_name; }
 
     /**
-     * Thiết lập name cho máy in.
+     * Thiết lập printer_name cho máy in.
      *
-     * @param string $name tên của máy in.
+     * @param string $printer_name tên của máy in.
      */
-    public function setName($name) { $this->name = $name; }
+    public function setName($printer_name) { $this->printer_name = $printer_name; }
 
     /**
-     * Lấy name của máy in.
+     * Lấy trạng thái của máy in.
      *
      * @return string|null trạng thái của máy in.
      */
     public function getStatus() { return $this->status; }
 
     /**
-     * Thiết lập name cho máy in.
+     * Thiết lập trạng thái cho máy in.
      *
      * @param string $status trạng thái của máy in.
      */
@@ -77,7 +77,7 @@ class PrinterEntity extends Entity {
     public function toArray() {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'printer_name' => $this->name,
             'status' => $this->status,
         ];
     }
