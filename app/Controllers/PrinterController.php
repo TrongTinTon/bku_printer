@@ -72,4 +72,53 @@ class PrinterController extends BaseController {
             Response::json(500, [],"Database error: " . $e->getMessage());
         }
     }
+    public function editPrinter() {
+        $request = new Request; 
+        $data = $request->getBody();
+        
+        try {
+            // Khởi tạo lớp validate và áp dụng luật
+            $validator = new ValidateRequest($data);
+            $validator->validate([
+                
+                'id' => 'required',
+
+            ]);
+        } catch (ValidationException $e) {
+            // Xử lý lỗi xác thực
+            Response::json(422, [
+                'errors' => $e->getValidationErrors()
+            ], 'Validation failed');
+        }
+    
+        $entity = new PrinterEntity();
+        $entity->setId($data['id']); // Gán ID của máy in cần chỉnh sửa
+        $entity->setName($data['printerName']);
+        $entity->setStatus($data['status']);
+        $entity->setIp($data['ip']);
+       
+
+        try {
+            $affectedRows = $this->printer->updatePrinter($entity);
+    
+            if ($affectedRows > 0) {
+                Response::json(200, [], 'Chỉnh sửa máy in thành công');
+            } else {
+                Response::json(404, [], 'Không tìm thấy máy in để chỉnh sửa');
+            }
+        } catch (PDOException $e) {
+            // Phân loại lỗi
+            if ($e->getCode() === '23000') {
+                if (strpos($e->getMessage(), 'Duplicate entry') !== false) {
+                    Response::json(409, [], "Duplicate entry detected: " . $e->getMessage());
+                }
+                if (strpos($e->getMessage(), 'foreign key constraint') !== false) {
+                    Response::json(409, [], "Foreign key violation: " . $e->getMessage());
+                }
+            }
+    
+            // Các lỗi khác
+            Response::json(500, [], "Database error: " . $e->getMessage());
+        }
+    }
 }

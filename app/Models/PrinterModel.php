@@ -25,7 +25,23 @@ class PrinterModel extends Model {
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$name, $status]);
     }
-
+    public function updatePrinter(PrinterEntity $entity) {
+        $sql = "UPDATE printers SET printer_name = :printer_name, status = :status, ip_address = :ip_address WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $printerName = $entity->getName();
+        $status = $entity->getStatus();
+        $id = $entity->getId();
+        $ipAddress = $entity->getIp();
+    
+        // Truyền tham số bằng biến
+        $stmt->bindParam(':printer_name', $printerName);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':ip_address', $ipAddress);
+    
+        $stmt->execute();
+        return $stmt->rowCount(); // Trả về số dòng bị ảnh hưởng
+    }
     public function getPrinters(array $conditions = []) {
         $sql = "SELECT p.printer_name , p.status, t.tray_name, t.total_page FROM printers p
             LEFT JOIN trays t ON t.printer_id = p.id";

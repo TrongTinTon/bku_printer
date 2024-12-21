@@ -12,6 +12,7 @@ class PrinterEntity extends Entity {
     private $id;
     private $printer_name;
     private $status;
+    private $ip;
 
     /**
      * Constructor của PrinterEntity.
@@ -20,10 +21,11 @@ class PrinterEntity extends Entity {
      * @param string|null $printer_name printer_name của máy in.
      * @param string|null $status trạng thái của máy in.
      */
-    public function __construct($id = null, $printer_name = null, $status = null) {
+    public function __construct($id = null, $printer_name = null, $status = null, $ip = null) {
         $this->id = $id;
         $this->printer_name = $printer_name;
         $this->status = $status;
+        $this->ip = $ip;
     }
 
       /**
@@ -32,7 +34,8 @@ class PrinterEntity extends Entity {
      * @return int|null ID của máy in.
      */
     public function getId() { return $this->id; }
-
+    public function getIp() { return $this->ip; }
+    public function setIp($ip) { $this->ip = $ip; }
     /**
      * Thiết lập ID cho máy in.
      *
@@ -79,6 +82,7 @@ class PrinterEntity extends Entity {
             'id' => $this->id,
             'printer_name' => $this->name,
             'status' => $this->status,
+            'ip' => $this->ip,
         ];
     }
 }
