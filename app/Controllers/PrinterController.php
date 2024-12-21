@@ -121,4 +121,36 @@ class PrinterController extends BaseController {
             Response::json(500, [], "Database error: " . $e->getMessage());
         }
     }
+    public function deletePrinter() {
+        $request = new Request; 
+        $data = $request->getBody();
+    
+        try {
+            // Xác thực dữ liệu đầu vào
+            $validator = new ValidateRequest($data);
+            $validator->validate([
+                'id' => 'required', // ID máy in cần xóa là bắt buộc
+            ]);
+        } catch (ValidationException $e) {
+            // Xử lý lỗi xác thực
+            Response::json(422, [
+                'errors' => $e->getValidationErrors()
+            ], 'Validation failed');
+        }
+    
+        $printerId = $data['id'];
+    
+        try {
+            $affectedRows = $this->printer->deletePrinter($printerId);
+    
+            if ($affectedRows > 0) {
+                Response::json(200, [], 'Xóa máy in thành công');
+            } else {
+                Response::json(404, [], 'Không tìm thấy máy in để xóa');
+            }
+        } catch (PDOException $e) {
+            // Phân loại lỗi nếu xảy ra vấn đề với cơ sở dữ liệu
+            Response::json(500, [], 'Lỗi cơ sở dữ liệu: ' . $e->getMessage());
+        }
+    }
 }

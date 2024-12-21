@@ -30,6 +30,12 @@ $router->add('POST', '/editPrinter', function () {
     (new App\Controllers\PrinterController())->editPrinter();
 });
 
+$router->add('POST', '/deletePrinter', function () {
+    AuthMiddleware::handle();
+    (new RolePermissionMiddleware('printers', ['delete']))->handle();
+    (new App\Controllers\PrinterController())->deletePrinter();
+});
+
 
 $router->add('POST', '/addPrintHistory', function () {
     AuthMiddleware::handle();
