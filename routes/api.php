@@ -24,6 +24,12 @@ $router->add('POST', '/addPrinter', function () {
     (new App\Controllers\PrinterController())->addPrinter();
 });
 
+$router->add('POST', '/editPrinter', function () {
+    AuthMiddleware::handle();
+    (new RolePermissionMiddleware('printers', ['update']))->handle();
+    (new App\Controllers\PrinterController())->editPrinter();
+});
+
 
 $router->add('POST', '/addPrintHistory', function () {
     AuthMiddleware::handle();

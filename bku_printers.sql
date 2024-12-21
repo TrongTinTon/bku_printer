@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 04, 2024 lúc 04:23 AM
+-- Thời gian đã tạo: Th12 21, 2024 lúc 03:02 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -30,6 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL,
   `page_name` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `unit_currency` varchar(10) NOT NULL DEFAULT 'vnd',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -37,13 +39,13 @@ CREATE TABLE `pages` (
 -- Đang đổ dữ liệu cho bảng `pages`
 --
 
-INSERT INTO `pages` (`id`, `page_name`, `created_at`) VALUES
-(1, 'A0', '2024-12-04 03:08:43'),
-(2, 'A1', '2024-12-04 03:08:43'),
-(3, 'A2', '2024-12-04 03:08:43'),
-(4, 'A3', '2024-12-04 03:08:43'),
-(5, 'A4', '2024-12-04 03:08:43'),
-(6, 'A5', '2024-12-04 03:08:43');
+INSERT INTO `pages` (`id`, `page_name`, `price`, `unit_currency`, `created_at`) VALUES
+(1, 'A0', 10000, 'vnd', '2024-12-04 03:08:43'),
+(2, 'A1', 5000, 'vnd', '2024-12-04 03:08:43'),
+(3, 'A2', 4000, 'vnd', '2024-12-04 03:08:43'),
+(4, 'A3', 3000, 'vnd', '2024-12-04 03:08:43'),
+(5, 'A4', 2000, 'vnd', '2024-12-04 03:08:43'),
+(6, 'A5', 1000, 'vnd', '2024-12-04 03:08:43');
 
 -- --------------------------------------------------------
 
@@ -76,15 +78,17 @@ INSERT INTO `page_orders` (`id`, `user_id`, `status`, `mode of payment`, `create
 CREATE TABLE `page_order_details` (
   `order_id` int(11) NOT NULL,
   `page_id` int(11) NOT NULL,
-  `total` int(11) NOT NULL
+  `price` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `unit_currency` varchar(10) NOT NULL DEFAULT 'vnd'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `page_order_details`
 --
 
-INSERT INTO `page_order_details` (`order_id`, `page_id`, `total`) VALUES
-(1, 4, 50);
+INSERT INTO `page_order_details` (`order_id`, `page_id`, `price`, `quantity`, `unit_currency`) VALUES
+(1, 2, 5000, 50, 'vnd');
 
 -- --------------------------------------------------------
 
@@ -120,6 +124,7 @@ INSERT INTO `permissions` (`id`, `role_id`, `resource`, `action`) VALUES
 CREATE TABLE `printers` (
   `id` int(11) NOT NULL,
   `printer_name` varchar(100) NOT NULL,
+  `ip_address` varchar(12) NOT NULL DEFAULT '127.0.0.1',
   `status` varchar(50) DEFAULT 'available'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -127,22 +132,22 @@ CREATE TABLE `printers` (
 -- Đang đổ dữ liệu cho bảng `printers`
 --
 
-INSERT INTO `printers` (`id`, `printer_name`, `status`) VALUES
-(1, 'Printer A', 'Hoạt động'),
-(2, 'Printer B', 'Hoạt động'),
-(3, 'C', 'Không hoạt động'),
-(6, 'C1', 'Hoạt động'),
-(23, 'C12', 'Hoạt động'),
-(25, 'C13', 'Hoạt động'),
-(27, 'C14', 'Hoạt động'),
-(29, 'C16', 'Hoạt động'),
-(31, 'C17', 'Hoạt động'),
-(33, 'C18', 'Hoạt động'),
-(35, 'C19', 'Hoạt động'),
-(41, 'A2', 'Hoạt động'),
-(69, 'A22', 'Hoạt động'),
-(78, 'A222', 'Hoạt động'),
-(83, 'A2212', 'Hoạt động');
+INSERT INTO `printers` (`id`, `printer_name`, `ip_address`, `status`) VALUES
+(1, 'Printer A', '192.1.0.1', 'Hoạt động'),
+(2, 'Printer B', '192.1.0.2', 'Hoạt động'),
+(3, 'C', '127.0.0.1', 'Không hoạt động'),
+(6, 'C1', '127.0.0.1', 'Hoạt động'),
+(23, 'C12', '127.0.0.1', 'Hoạt động'),
+(25, 'C13', '127.0.0.1', 'Hoạt động'),
+(27, 'C14', '127.0.0.1', 'Hoạt động'),
+(29, 'C16', '127.0.0.1', 'Hoạt động'),
+(31, 'C17', '127.0.0.1', 'Hoạt động'),
+(33, 'C18', '127.0.0.1', 'Hoạt động'),
+(35, 'C19', '127.0.0.1', 'Hoạt động'),
+(41, 'A2', '127.0.0.1', 'Hoạt động'),
+(69, 'A22', '127.0.0.1', 'Hoạt động'),
+(78, 'A222', '127.0.0.1', 'Hoạt động'),
+(83, 'A2212', '127.0.0.1', 'Hoạt động');
 
 -- --------------------------------------------------------
 
@@ -186,29 +191,23 @@ CREATE TABLE `print_history` (
 --
 
 INSERT INTO `print_history` (`id`, `user_id`, `printer_id`, `file_name`, `pages`, `created_at`) VALUES
-(1, 1, 1, 'document1.pdf', 10, '2024-12-01 17:53:19'),
-(2, 1, 2, 'image1.png', 1, '2024-12-01 17:53:19'),
-(3, 2, 1, 'report.docx', 5, '2024-12-01 17:53:19'),
-(4, 1, 1, 'testDocs.pdf', 0, '2024-12-03 14:59:43'),
-(5, 1, 1, 'testDocs.pdf', 0, '2024-12-03 14:59:46'),
-(6, 1, 1, 'testDocs.pdf', 0, '2024-12-03 14:59:56'),
-(7, 1, 1, 'testDocs.pdf', 0, '2024-12-03 15:01:03'),
-(12, 1, 1, 'testDocs.pdf', 0, '2024-12-03 17:58:46'),
-(13, 1, 1, 'testDocs.pdf', 0, '2024-12-03 17:58:48'),
-(14, 2, 1, 'testDocs.pdf', 0, '2024-12-03 18:04:13'),
-(15, 2, 2, 'testDocs.pdf', 0, '2024-12-03 18:04:18'),
-(16, 2, 2, 'DATOTNGHIEP.pdf', 0, '2024-12-03 18:04:34'),
-(17, 2, 2, 'DATOTNGHIEP.pdf', 0, '2024-12-03 18:04:37'),
-(18, 1, 1, 'testDocs.pdf', 0, '2024-12-03 18:04:41'),
-(19, 1, 1, 'testDocs.pdf', 0, '2024-12-03 18:05:08'),
-(20, 1, 1, 'testDocs.pdf', 0, '2024-12-03 18:05:10'),
-(21, 1, 1, 'testDocs.pdf', 0, '2024-12-03 18:05:37'),
-(22, 1, 1, 'testDocs.pdf', 0, '2024-12-03 18:06:28'),
-(23, 1, 1, 'testDocs.pdf', 0, '2024-12-03 18:06:55'),
-(24, 1, 1, 'testDocs.pdf', 0, '2024-12-03 19:10:54'),
-(25, 1, 1, 'testDocs.pdf', 0, '2024-12-03 19:11:21'),
-(26, 1, 1, 'testDocs.pdf', 0, '2024-12-03 20:01:12'),
-(27, 1, 1, 'testDocs.pdf', 0, '2024-12-03 20:02:02');
+(1, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:41:39'),
+(2, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:45:39'),
+(3, 1, 1, 'test_upload_pdf.pdf', 24, '2024-12-05 12:45:44'),
+(4, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:45:47'),
+(5, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:45:51'),
+(6, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:49:09'),
+(7, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:50:24'),
+(8, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:51:57'),
+(9, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 12:53:19'),
+(10, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 14:51:26'),
+(11, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 16:11:40'),
+(12, 1, 1, 'test_upload_pdf.pdf', 24, '2024-12-05 16:14:59'),
+(13, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 16:17:45'),
+(14, 1, 1, 'test_upload_pdf.pdf', 24, '2024-12-05 16:19:55'),
+(15, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 16:29:43'),
+(16, 1, 2, 'test_upload_pdf.pdf', 24, '2024-12-05 16:31:30'),
+(17, 1, 1, 'test_upload_pdf.pdf', 24, '2024-12-08 07:09:57');
 
 -- --------------------------------------------------------
 
@@ -226,8 +225,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `role_name`) VALUES
-(2, 'staff'),
-(1, 'student');
+(2, 'Nhân viên'),
+(1, 'Sinh viên');
 
 -- --------------------------------------------------------
 
@@ -274,7 +273,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `user_name`, `email`, `password_hash`, `role_id`, `created_at`) VALUES
 (1, 'Tín Tôn', 'tin.tontrong@hcmut.edu.vn', '$2y$10$hY6KmsRKH059WegZT7WLLeBaawJ1lzk8aK7Tg4HiuriO9UKPxUYXi', 1, '2024-12-01 17:53:19'),
-(2, 'staff1', 'qly@gmail.com', '$2y$10$hY6KmsRKH059WegZT7WLLeBaawJ1lzk8aK7Tg4HiuriO9UKPxUYXi', 2, '2024-12-01 17:53:19'),
+(2, 'Nhân viên In', 'qly@gmail.com', '$2y$10$hY6KmsRKH059WegZT7WLLeBaawJ1lzk8aK7Tg4HiuriO9UKPxUYXi', 2, '2024-12-01 17:53:19'),
 (3, 'Huy Trần', 'huytran@hcmut.edu.vn', '$2y$10$hY6KmsRKH059WegZT7WLLeBaawJ1lzk8aK7Tg4HiuriO9UKPxUYXi', 1, '2024-12-01 17:53:19');
 
 --
@@ -390,7 +389,7 @@ ALTER TABLE `printer_file_types`
 -- AUTO_INCREMENT cho bảng `print_history`
 --
 ALTER TABLE `print_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT cho bảng `roles`
