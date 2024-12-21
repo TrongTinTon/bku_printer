@@ -42,6 +42,13 @@ class PrinterModel extends Model {
         $stmt->execute();
         return $stmt->rowCount(); // Trả về số dòng bị ảnh hưởng
     }
+    public function deletePrinter($printerId) {
+        $sql = "DELETE FROM printers WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $printerId, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->rowCount(); // Trả về số dòng bị xóa
+    }
     public function getPrinters(array $conditions = []) {
         $sql = "SELECT p.printer_name , p.status, t.tray_name, t.total_page FROM printers p
             LEFT JOIN trays t ON t.printer_id = p.id";
